@@ -17,5 +17,11 @@ class NewTaskActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityNewTaskBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        binding.buttonSaveTask.setOnClickListener {
+            viewModel.addTask(binding.editTextTitle.text.toString(), binding.editTextDescription.text.toString())
+        finish()
+        }
+
     }
 }

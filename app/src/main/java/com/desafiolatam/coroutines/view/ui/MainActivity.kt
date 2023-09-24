@@ -1,5 +1,6 @@
 package com.desafiolatam.coroutines.view.ui
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -27,6 +28,11 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         getTaskList()
+
+        binding.addButton.setOnClickListener {
+            val intent = Intent(this, NewTaskActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun getTaskList() {
@@ -37,10 +43,24 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun deleteTask(taskEntity: TaskEntity){
+        viewModel.deleteTask(taskEntity)
+    }
+
+    private fun completeTask(taskEntity: TaskEntity, isCompleted:Boolean){
+        viewModel.completeTask(taskEntity,isCompleted)
+    }
+
     private fun initRecyclerView(taskList: List<TaskEntity>) {
         adapter = TaskAdapter()
         adapter.taskList = taskList
         binding.rvTask.layoutManager = LinearLayoutManager(this)
         binding.rvTask.adapter = adapter
+        adapter.onClickLong= {
+            taskEntity ->  deleteTask(taskEntity)
+        }
+        adapter.onClickCheckBox={
+            taskEntity, isChecked ->  completeTask(taskEntity,isChecked)
+        }
     }
 }
